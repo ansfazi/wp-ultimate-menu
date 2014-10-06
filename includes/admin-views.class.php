@@ -20,7 +20,7 @@ class UM_Admin_Views {
 	}
 
 	public static function index() {
-	    //include ('views/index.php');
+	    include ('views/index.php');
 	}
 }
 
