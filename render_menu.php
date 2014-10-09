@@ -31,12 +31,112 @@ foreach ($items as $key => $item) {
 .cat-posts{
 	/* display: none !important; */
 }
+.main-menu .submenu-content .channels li{
+    line-height: 30px;
+}
+.main-menu .submenu-content .channels li a{
+    margin-bottom: 0px;
+}
+</style>
+<style type="text/css" media="screen">
+.cyan {
+    border-bottom: 1px solid #4fb889 !important;
+}
+
+.cyan .navbar-inner{
+    background: #4fb889 ;
+}
+.cyan .ultimate_menu {
+    background: #4fb889 ;
+}
+.cyan .main-menu>li.submenu.active .submenu-content{
+    background: #e0fff6 ;
+}
+.cyan .main-menu .submenu-content .channels{
+    background: #D2F1E9 ;
+}
+.cyan .main-menu .submenu-content .channels li a{
+    color: #4fb889;
+}
+.cyan .main-menu>li.submenu.active>a, .main-menu>li.submenu.locked>a{
+    color: #4fb889;
+}
+.cyan .main-menu.inline>li:hover{
+    background: #e0fff6 ;
+
+}
+.cyan .main-menu.inline>li a:hover{
+    color: #4fb889 ;
+}
+.cyan .main-menu>li.submenu.active .submenu-content, .main-menu>li.submenu.locked .submenu-content, .main-menu>li.submenu:focus .submenu-content{
+    border-bottom: 5px solid #4fb889 ;
+}
+.cyan .brand{
+    color: #D2F1E9;
+}
+
+.red {
+    border-bottom: 1px solid #ffd6d5 !important;
+}
+.red .navbar-inner{
+    background: #ee403d;
+}
+.red .ultimate_menu {
+    background: #ee403d;
+}
+.red .main-menu>li.submenu.active .submenu-content{
+    background: #ffeaea;
+}
+.red .main-menu .submenu-content .channels{
+    background: #ffd6d5;
+}
+.red .main-menu .submenu-content .channels li a{
+    color: #ee403d;
+}
+.red .main-menu>li.submenu.active>a, .main-menu>li.submenu.locked>a{
+    color: #ee403d;
+}
+.red .main-menu.inline>li:hover{
+    background: #ffd6d5;
+
+}
+.red .main-menu.inline>li a:hover{
+    color: #ee403d;
+}
+.red .main-menu>li.submenu.active, .main-menu>li.submenu.locked{
+    border-bottom: 4px solid #ffd6d5;
+}
+.red .main-menu>li.submenu.active .submenu-content, .main-menu>li.submenu.locked .submenu-content, .main-menu>li.submenu:focus .submenu-content{
+    border-bottom: 5px solid #ee403d;
+}
+
+.cyan .main-menu.inline .logo1:hover{
+    background: transparent;
+}
+.cyan .main-menu.inline .logo1 a:hover{
+    color: #D2F1E9;
+}
+.red .main-menu.inline .logo1:hover{
+    background: transparent;
+}
+.red .main-menu.inline .logo1 a:hover{
+    color: #ffd6d5;
+}
+.red .brand{
+    color: #ffd6d5;
+}
+.navbar .brand{
+    margin-left: 0px;
+    line-height: 40px;
+
+}
 </style>
 
 <script type="text/javascript">
 jQuery(function() {
     jQuery('.submenu').hover(function() {
         jQuery(this).addClass('active');
+        jQuery('.subnav-posts').hide();
         jQuery(this).find('.subnav-posts:first').show()
     }, function() {
         /* Stuff to do when the mouse leaves the element */
@@ -45,26 +145,28 @@ jQuery(function() {
     });
     jQuery('.subnav-channel').hover(function() {
         /* Stuff to do when the mouse enters the element */
-        //console.log( jQuery(this).html() ) ;
-        //console.log(jQuery(this).attr('data-tag'));
+        jQuery('.subnav-posts').hide();
         jQuery('.' + jQuery(this).attr('data-id')).show();
 
     }, function() {
         /* Stuff to do when the mouse leaves the element */
-        jQuery('.' + jQuery(this).attr('data-id')).hide();
+       // jQuery('.' + jQuery(this).attr('data-id')).hide();
     });
 
 });
 </script>
 <header id="site-header">
-    <div class="navbar">
-        <div class="navbar-inner">
-            <ul class="main-menu nav inline">
-			<li class="logo1">
+    <div class="navbar <?php echo get_option('um_menu_theme')?>">
+        <div class="navbar-inner ">
+            <ul class="main-menu nav inline ultimate_menu">
+<?php
+if (get_option('um_enable_logo') == 'Yes') {?>
+            <li class="logo1">
 			    <a class="brand" data-turbo-target="body-container" href="<?php echo site_url();?>">
 			        <span><?php bloginfo('name');?></span>
 			    </a>
 			</li>
+<?php }?>
 
             <li class="follow submenu pull-right">
                 <a class="follow-trigger" href="<?php site_url();?>">
@@ -143,12 +245,12 @@ wp_reset_query();
 
 			while (have_posts()):the_post();
 				?>
-			                            <li class="subnav-post">
-			                                    <a data-turbo-target="post-slider" href="">
-			                                        <img src="">
-			                                    </a>
-			                                    <a data-turbo-target="post-slider" href="<?php the_permalink();?>"><?php the_title();?> <?php echo $sub_item['title'] . ' - ' . $sub_item['object_id']?></a>
-			                                </li>
+																																																																																													                            <li class="subnav-post">
+																																																																																													                                    <a data-turbo-target="post-slider" href="">
+																																																																																													                                        <img src="">
+																																																																																													                                    </a>
+																																																																																													                                    <a data-turbo-target="post-slider" href="<?php the_permalink();?>"><?php the_title();?> <?php echo $sub_item['title'] . ' - ' . $sub_item['object_id']?></a>
+																																																																																													                                </li>
 
 	<?php endwhile;
 			wp_reset_query();
