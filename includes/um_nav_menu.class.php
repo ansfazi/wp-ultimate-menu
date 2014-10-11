@@ -54,7 +54,11 @@ if (!class_exists('Ultimate_Menu_Nav_Menus')):
 		public function add_label_meta_box_um() {
 			global $pagenow;
 			if ('nav-menus.php' == $pagenow) {
-
+				global $WPUM;
+				if (is_admin()) {
+					wp_enqueue_script('jquery-validate-min', $WPUM::plugin_url() . '/assets/js/admin/jquery.validate.min.js');
+					wp_enqueue_script('post-validate', $WPUM::plugin_url() . '/assets/js/admin/menu_validate.js');
+				}
 				add_meta_box(
 					'ultimate_menu_meta_box',
 					__("Label", "Label"),
@@ -69,35 +73,35 @@ if (!class_exists('Ultimate_Menu_Nav_Menus')):
 		public function UM_label_metabox_contents() {
 			?>
 	<div id='megamenu_accordion'>
-		    <div class='accordion_content'>
-		        <div class="inside">
-		            <div class="customlinkdiv" id="customlinkdiv">
-		                <input type="hidden" value="custom" name="menu-item[-33][menu-item-type]">
-		                <p id="menu-item-url-wrap" style="z-index: -1;position: absolute">
-		                    <label class="howto" for="custom-menu-item-url">
-		                        <span>URL</span>
-		                        <input id="custom-menu-item-url" name="menu-item[-33][menu-item-url]" type="text" class="code menu-item-textbox" value="http://#">
-		                    </label>
-		                </p>
-		                <p id="menu-item-name-wrap">
-		                    <label class="howto" for="custom-menu-item-name">
-		                        <span>Label Text</span>
-		                        <input id="custom-menu-item-name" name="menu-item[-33][menu-item-title]" type="text" class="regular-text menu-item-textbox input-with-default-title" title="Label Text">
-		                    </label>
-		                </p>
+												    <div class='accordion_content'>
+												        <div class="inside">
+												            <div class="customlinkdiv" id="customlinkdiv">
+												                <input type="hidden" value="custom" name="menu-item[-33][menu-item-type]">
+												                <p id="menu-item-url-wrap" style="z-index: -1;position: absolute">
+												                    <label class="howto" for="custom-menu-item-url">
+												                        <span>URL</span>
+												                        <input id="custom-menu-item-url" name="menu-item[-33][menu-item-url]" type="text" class="code menu-item-textbox" value="http://#">
+												                    </label>
+												                </p>
+												                <p id="menu-item-name-wrap">
+												                    <label class="howto" for="custom-menu-item-name">
+												                        <span>Label Text</span>
+												                        <input id="custom-menu-item-name" name="menu-item[-33][menu-item-title]" type="text" class="regular-text menu-item-textbox input-with-default-title" title="Label Text">
+												                    </label>
+												                </p>
 
-		                <p class="button-controls">
-		                    <span class="add-to-menu">
-		                        <input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu" name="add-custom-menu-item" id="submit-customlinkdiv">
-		                        <span class="spinner"></span>
-		                    </span>
-		                </p>
+												                <p class="button-controls">
+												                    <span class="add-to-menu">
+												                        <input type="submit" class="button-secondary submit-add-to-menu right" value="Add to Menu" name="add-custom-menu-item" id="submit-customlinkdiv">
+												                        <span class="spinner"></span>
+												                    </span>
+												                </p>
 
-		            </div>
-		            <!-- /.customlinkdiv -->
-		        </div>
-		    </div>
-		</div>
+												            </div>
+												            <!-- /.customlinkdiv -->
+												        </div>
+												    </div>
+												</div>
 
 	<?php
 	}

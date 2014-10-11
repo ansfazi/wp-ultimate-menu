@@ -1,22 +1,23 @@
 <?php
 $menu = array();
 foreach ($items as $key => $item) {
-	//echo $item->ID . $item->title.' - '. $item->menu_item_parent . ' -- ';
 	if ($item->menu_item_parent == 0) {
 		$temp = (array) $item;
 		$temp['meta'] = array_filter((array) get_post_meta($item->ID, '_ultimate_menu', true));
 		$menu[$item->ID] = $temp;
 	} else {
-
-		$menu[$item->menu_item_parent]['sub'][] = (array) $item;
+		$menu[$item->menu_item_parent]['sub'][$item->ID] = (array) $item;
+		//$menu[$item->menu_item_parent]['sub'][$item->ID] = (array) $item;
 	}
 }
-
-// echo '<pre>';
-// print_r($menu);
-// echo '</pre>';
+if (isset($_GET['debug'])) {
+	echo '<pre>';
+	print_r($menu);
+	echo '</pre>';
+}
+global $WPUM;
 ?>
-<link href="http://localhost/menu/menu.css" media="screen" rel="stylesheet" type="text/css" />
+<link href="<?php echo $WPUM::plugin_url()?>/assets/_menu.css" media="screen" rel="stylesheet" type="text/css" />
 
 <style type="text/css">
 .main-menu>li:nth-child(n+3){ display: block; }
@@ -122,13 +123,22 @@ foreach ($items as $key => $item) {
 .red .main-menu.inline .logo1 a:hover{
     color: #ffd6d5;
 }
-.red .brand{
+.red .site-name{
     color: #ffd6d5;
 }
-.navbar .brand{
+.navbar .site-name{
     margin-left: 0px;
-    line-height: 40px;
+    line-height: 20px;
 
+}
+body{
+    margin-top: 45px;
+}
+.wpum{
+    position: fixed;
+    top: 32px;
+    z-index: 999;
+    width: 100%;
 }
 </style>
 
@@ -155,14 +165,14 @@ jQuery(function() {
 
 });
 </script>
-<header id="site-header">
+<header id="site-header" class="wpum">
     <div class="navbar <?php echo get_option('um_menu_theme')?>">
         <div class="navbar-inner ">
             <ul class="main-menu nav inline ultimate_menu">
 <?php
 if (get_option('um_enable_logo') == 'Yes') {?>
             <li class="logo1">
-			    <a class="brand" data-turbo-target="body-container" href="<?php echo site_url();?>">
+			    <a class="brand site-name" data-turbo-target="body-container" href="<?php echo site_url();?>">
 			        <span><?php bloginfo('name');?></span>
 			    </a>
 			</li>
@@ -223,38 +233,41 @@ if (get_option('um_enable_logo') == 'Yes') {?>
 <?php foreach ($item['sub'] as $key => $sub_item) {?>
                                     <li>
                                         <a class="subnav-channel" data-id="posts_<?php echo $sub_item['ID']?>"  data-tag="" href="<?php echo $sub_item['url'];?>">
-<?php echo $sub_item['ID'] . $sub_item['title'];?>
+<?php echo $sub_item['title'];?>
 </a>
                                     </li>
 <?php }?>
 </ul>
 <?php
-//print_r( $item['sub']);
-		foreach ($item['sub'] as $key => $sub_item) {
+foreach ($item['sub'] as $key => $sub_item) {
 
-			//print_r(wp_get_post_terms($sub_item['object_id']));
-			?>
+		//print_r(wp_get_post_terms($sub_item['object_id']));
+		?>
             <ul class="subnav-posts cat-posts <?php echo 'posts_' . $sub_item['ID']?>" style="display: none;" >
 <?php
 wp_reset_query();
-			$args = array('cat' => $sub_item['object_id']);
-
-			query_posts($args);
+		$args = array();
+		if ($sub_item['type_label'] == 'Tag') {
+			$args['tag'] = $sub_item['title'];
+		} else {
+			$args['cat'] = $sub_item['object_id'];
+		}
+		query_posts($args);
 // The Loop
-			// Reset Query
+		// Reset Query
 
-			while (have_posts()):the_post();
-				?>
-																																																																																													                            <li class="subnav-post">
-																																																																																													                                    <a data-turbo-target="post-slider" href="">
-																																																																																													                                        <img src="">
-																																																																																													                                    </a>
-																																																																																													                                    <a data-turbo-target="post-slider" href="<?php the_permalink();?>"><?php the_title();?> <?php echo $sub_item['title'] . ' - ' . $sub_item['object_id']?></a>
-																																																																																													                                </li>
+		while (have_posts()):the_post();
+			?>
+										<li class="subnav-post">
+									    <a data-turbo-target="post-slider" href="<?php the_permalink();?>">
+	<?php the_post_thumbnail(array(200, 100));?>
+									    </a>
+									    <a data-turbo-target="post-slider" href="<?php the_permalink();?>"><?php the_title();?></a>
+									</li>
 
 	<?php endwhile;
-			wp_reset_query();
-			?>
+		wp_reset_query();
+		?>
 </ul>
 <?php }?>
 </div>

@@ -28,6 +28,7 @@ if (!class_exists('DealOfDay')):
 			return self::$_instance;
 		}
 		public function __construct() {
+			add_filter('wp_nav_menu_args', array($this, 'modify_nav_menu_args'), 9999);
 			$this->define_constants();
 			$this->includes();
 		}
@@ -97,6 +98,25 @@ if (!class_exists('DealOfDay')):
 		public function plugin_path() {
 			return untrailingslashit(plugin_dir_path(__FILE__));
 		}
+		/**
+		 * Use the Mega Menu walker to output the menu
+		 * Resets all parameters used in the wp_nav_menu call
+		 * Wraps the menu in mega-menu IDs and classes
+		 *
+		 * @since 1.0
+		 * @param $args array
+		 * @return array
+		 */
+		public function modify_nav_menu_args($args) {
+
+			$defaults = array(
+				'walker' => new Walker_Ultimate_Menu()
+			);
+
+			$args = array_merge($args, $defaults);
+
+			return $args;
+		}
 	}
 /**
  * Returns the main instance of DOD to prevent the need to use globals.
@@ -124,3 +144,55 @@ function pr($arr) {
 	echo '</pre>';
 }
 //require_once dirname(__FILE__) . '/menu-item-custom-fields/doc/menu-item-custom-fields-example.php';
+
+class Walker_Ultimate_Menu extends Walker_Nav_Menu {
+
+	/**
+	 * Starts the list before the elements are added.
+	 *
+	 * @see Walker::start_lvl()
+	 *
+	 * @since 1.0
+	 *
+	 * @param string $output Passed by reference. Used to append additional content.
+	 * @param int    $depth  Depth of menu item. Used for padding.
+	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 */
+	function start_lvl(&$output, $depth = 0, $args = array()) {
+
+		echo 'asdf';
+	}
+
+	/**
+	 * Ends the list of after the elements are added.
+	 *
+	 * @see Walker::end_lvl()
+	 *
+	 * @since 1.0
+	 *
+	 * @param string $output Passed by reference. Used to append additional content.
+	 * @param int    $depth  Depth of menu item. Used for padding.
+	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 */
+	function end_lvl(&$output, $depth = 0, $args = array()) {
+		echo 'asdf';
+	}
+
+	/**
+	 * Custom walker. Add the widgets into the menu.
+	 *
+	 * @see Walker::start_el()
+	 *
+	 * @since 1.0
+	 *
+	 * @param string $output Passed by reference. Used to append additional content.
+	 * @param object $item   Menu item data object.
+	 * @param int    $depth  Depth of menu item. Used for padding.
+	 * @param array  $args   An array of arguments. @see wp_nav_menu()
+	 * @param int    $id     Current item ID.
+	 */
+	function start_el(&$output, $item, $depth = 0, $args = array(), $id = 0) {
+		echo ' -- ';
+		$output = 'asdf';
+	}
+}
